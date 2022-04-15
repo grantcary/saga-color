@@ -15,21 +15,24 @@ cpdef rgb_to_luma(int w, int h, unsigned char[:,:] rgb_values):
 def imageparse(image_path):
     timer = time.time()
     img = cv2.imread(image_path)
-    w, h, d = img.shape
+    h, w, d = img.shape
     rgb = img.reshape(w*h, 3)
     print(time.time()-timer)
     start_time = time.time()
-    luma = rgb_to_luma(w, h, rgb)
+    luma = rgb_to_luma(h, w, rgb)
     print(time.time()-start_time)
     return w, h, rgb, luma
 
 @cython.boundscheck(False)
-cpdef luma_zones(int w, int h, int[:] luma):
-    cdef np.ndarray zones = np.arange(w*h)
-    zones = zones.astype('float')
+cpdef gamma_plus_minus(int w, int h, int[:] luma):
+    cdef np.ndarray plus_gamma = np.arange(h*w)
+    cdef np.ndarray minus_gamma = np.arange(h*w)
+    plus_gamma = plus_gamma.astype('uint8')
+    minus_gamma = minus_gamma.astype('uint8')
     timer = time.time()
     for i in range(0, w*h):
-        tol = float(10**1)
-        zones[i] = int((luma[i]/255)*tol+0.5)/tol
+        # zones[i] = int((luma[i]/255)*tol+0.5)/tol
+        plus_gamma[i] = int(((((luma[i]/255)**(1/2.2))*255)*1.0+0.5)/1.0)
+        minus_gamma[i] = int(((((luma[i]/255)**(1/0.455))*255)*1.0+0.5)/1.0)
     print(time.time()-timer)
-    return zones
+    return plus_gamma, minus_gamma
