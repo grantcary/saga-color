@@ -39,3 +39,15 @@ cpdef gamma_plus_minus(int w, int h, unsigned char[:] luma):
         minus_gamma[i] = int(((((luma[i]/255)**(1/0.455))*255)*1.0+0.5)/1.0)
     print(time.time()-timer)
     return zones, plus_gamma, minus_gamma
+
+@cython.boundscheck(False)
+cpdef merge(int w, int h, unsigned char[:,:] set1, unsigned char[:,:] set2):
+    cdef int counter = 0
+    for i in range(0, h):
+        for j in range(0, w):
+            if set1[i][j] == 255 and set1[i][j] == set2[i][j]:
+                set2[i][j] = 0
+                counter += 1
+    print(counter)
+    return set2
+    
