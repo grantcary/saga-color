@@ -14,5 +14,10 @@ def gamma(gray):
     return g_pls, g_min
 
 def ansel(gray):
-    zones = np.array(((gray/255)*10+0.5)/10, dtype = 'uint8')
-    return zones
+    return np.array(((gray/255)*10+0.5), dtype = 'uint8')
+
+def edge(gray, sigma=0.33):
+    m = np.median(gray)
+    t_upr, t_lwr = int(min(255, (1.0+sigma)*m)), int(max(0, (1.0-sigma)*m))
+    gblur = cv2.GaussianBlur(gray, (3, 3), cv2.BORDER_DEFAULT)
+    return cv2.Canny(gblur, t_lwr, t_upr)
