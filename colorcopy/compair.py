@@ -18,7 +18,7 @@ while(cap.isOpened()):
   if ret == True:
     h, w, _ = frame.shape
     frame = cv2.resize(frame, (int(w/2), int(h/2)))
-    frame = image2lut.lut(frame, LUT)
+    frame = image2lut.apply_lut(frame, LUT)
     cv2.imshow('Frame',frame)
     if cv2.waitKey(25) & 0xFF == ord('q'):
       break
