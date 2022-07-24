@@ -1,12 +1,12 @@
-import image2lut
+import tinycube
+# import image2lut
 import cv2
 
 
 lut = 'C:/ProgramData/Blackmagic Design/DaVinci Resolve/Support/LUT/WIR Dolce LUT Collection/WIR Dolce 05.cube'
 vid = "D:/videos/Family/Grandma's 90th/P1033192.MOV"
 
-LUT = image2lut.lut_instance(lut)
-
+lut = tinycube.parsecube(lut)
 
 cap = cv2.VideoCapture(vid)
 
@@ -18,7 +18,7 @@ while(cap.isOpened()):
   if ret == True:
     h, w, _ = frame.shape
     frame = cv2.resize(frame, (int(w/2), int(h/2)))
-    frame = image2lut.apply_lut(frame, LUT)
+    frame = tinycube.cube2lut(frame, lut, int(h/2), int(w/2))
     cv2.imshow('Frame',frame)
     if cv2.waitKey(25) & 0xFF == ord('q'):
       break
