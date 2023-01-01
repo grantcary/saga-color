@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-import iParser as parse
+import colorcopy.imageparser as parse
 import numpy as np
 import colour
 import time

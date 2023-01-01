@@ -3,7 +3,7 @@ from time import time
 import numpy as np
 import itertools
 
-import iParser as parse
+import colorcopy.imageparser as parse
 
 # Resources
 # https://github.com/colour-science/colour

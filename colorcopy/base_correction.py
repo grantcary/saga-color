@@ -1,13 +1,14 @@
-from matplotlib import pyplot as plt
-import iParser as parse
+from imageparser import FrameOps
+import numpy as np
+import cv2
 
-path = 'D:/Pictures/Family Photos/2008-2013/2012-06-15/008.JPG'
+path = '/home/grant/Desktop/compute.jpg'
 
+img = cv2.imread(path)
 
-c, g, h, w = parse.parse(path)
-u, l = parse.gamma(g)
-a = parse.ansel(g)
-e = parse.edge(g)
+x = FrameOps(img)
+a, b = x.gamma(2.2), x.gamma(0.455)
+z = x.to_ansel()
 
-plt.imshow(e, cmap='gray')
-plt.show()
+cv2.imshow('image', z)
+cv2.waitKey(0)
