@@ -19,12 +19,12 @@ class FrameOps:
   def to_ansel(self) -> np.array: return np.array((np.array(np.array(((self.gray/255)*10), dtype='uint8')/10)*255), dtype='uint8')
 
   # run edge detection on image
-  def to_edge(self, sigma=0.33) -> np.array:
+  def to_edge(self, sigma: float = 0.33) -> np.array:
     m = np.median(self.gray)
     upper_threshold, lower_threshold = int(min(255, (1.0+sigma)*m)), int(max(0, (1.0-sigma)*m))
     gausian_blur = cv2.GaussianBlur(self.gray, (3, 3), cv2.BORDER_DEFAULT)
     return cv2.Canny(gausian_blur, lower_threshold, upper_threshold)
 
   # set gamma curve on image
-  def gamma(self, sigma: int = 2.2) -> np.array:
+  def gamma(self, sigma: float = 2.2) -> np.array:
     return np.array(255*(self.gray/255)**sigma, dtype = 'uint8')
