@@ -10,10 +10,8 @@ class FrameOps:
       self.gray = self.img
     elif len(self.img.shape) == 3:
       self.h, self.w, self.d = img.shape
-      self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-
-  def to_color(self) -> np.array: return cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB) if self.d else print('color image required')
-  def to_gray(self) -> np.array: return self.gray
+      self.gray = cv2.cvtColor(self.img, cv2.COLOR_RGB2GRAY)
+      self.color = self.img
 
   # convert gray scale image into clipped Ansel Adams zones. 0-255 -> 0.0-1.0 (clipped) -> 0-255
   def to_ansel(self) -> np.array: return np.array((np.array(np.array(((self.gray/255)*10), dtype='uint8')/10)*255), dtype='uint8')
