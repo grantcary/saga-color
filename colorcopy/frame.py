@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 
+def init_frame(path: str) -> np.array: return cv2.imread(path)
+
 class FrameOps:
   def __init__(self, img: np.array) -> None:
     self.img = img
