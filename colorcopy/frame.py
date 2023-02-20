@@ -1,3 +1,4 @@
+from scipy import ndimage
 import numpy as np
 import imutils
 import cv2
@@ -16,11 +17,8 @@ class FrameOps:
   def crop(self, x: int, y: int, w: int, h: int) -> np.array:
     return self.img[y:y+h, x:x+w]
   
-  def rotate_and_scale(self, angle: int = 0, scale: float = 1.0) -> np.array:
-    h, w = self.img.shape[:2]
-    cX, cY = (w // 2, h // 2)
-    rotation_matrix = cv2.getRotationMatrix2D((cX, cY), angle, scale)
-    return cv2.warpAffine(self.img, rotation_matrix, (w, h))
+  def rotate_and_scale(self, angle: int = 0, center: tuple[int, int] = None, scale: float = 1.0) -> np.array:
+    return imutils.roatate(angle, center, scale)
 
   def rotate_bound(self, angle: int) -> np.array:
     return imutils.rotate_bound(self.img, angle)
@@ -31,8 +29,7 @@ class FrameOps:
   def normalize(self, min, max) -> np.array:
     return cv2.normalize(self.img, None, min, max, cv2.NORM_MINMAX)
   
-  # set gamma curve on image
-  def gamma(self, sigma: float = 2.2) -> np.array:
+  def gamma_curve(self, sigma: float = 2.2) -> np.array:
     return np.array(255*(self.img/255)**sigma, dtype = 'uint8')
   
   # convert gray scale image into clipped Ansel Adams zones. 0-255 -> 0.0-1.0 (clipped) -> 0-255
@@ -43,15 +40,12 @@ class FrameOps:
       image = self.gray
     return np.array((np.array(np.array(((image/255)*10), dtype='uint8')/10)*255), dtype='uint8')
 
-  # run edge detection on image
-  def to_edge(self, sigma: float = 0.33) -> np.array:
+  def canny(self, sigma: float = 0.9) -> np.array:
     image = self.img
     if len(image.shape) == 3:
       image = self.gray
-    m = np.median(self.image)
-    upper_threshold, lower_threshold = int(min(255, (1.0+sigma)*m)), int(max(0, (1.0-sigma)*m))
-    gausian_blur = cv2.GaussianBlur(self.image, (3, 3), cv2.BORDER_DEFAULT)
-    return cv2.Canny(gausian_blur, lower_threshold, upper_threshold)
+    gausian_blur = ndimage.gaussian_filter(image, sigma=sigma)
+    return imutils.auto_canny(gausian_blur)
 
 class Image(FrameOps):
   def __init__(self, path: str) -> None:
