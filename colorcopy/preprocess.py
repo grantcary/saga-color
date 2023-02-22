@@ -1,6 +1,6 @@
 import os
 from os.path import expanduser
-from matplotlib import pyplot as plt
+import pathlib
 from frame import Image
 
 DATASET = f'{expanduser("~")}/Desktop/dataset'
@@ -17,8 +17,7 @@ def process_dataset() -> None:
   if 'pairs' not in dataset_dir:
     os.mkdir(f'{DATASET}/pairs')
   for file, file_num in enumerate(dataset_dir):
-    # TODO: get file type and append to filename 
-    o_name, a_name = f'{file_num:03d}_o', f'{file_num:03d}_a'
+    o_name, a_name = f'{file_num:03d}_o.jpg', f'{file_num:03d}_a.jpg'
     if o_name not in dataset_dir or a_name not in dataset_dir:
       original = Image(file).img
       augmented = process_image(f'{DATASET}/{file}')

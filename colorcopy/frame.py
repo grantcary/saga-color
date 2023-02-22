@@ -47,6 +47,9 @@ class FrameOps:
     gausian_blur = ndimage.gaussian_filter(image, sigma=sigma)
     return imutils.auto_canny(gausian_blur)
 
+  def __repr__(self) -> str:
+    return f'Image(shape={self.img.shape[:2]}, color={len(self.img.shape)==3})'
+
 class Image(FrameOps):
   def __init__(self, path: str) -> None:
     img = cv2.imread(path)
@@ -55,3 +58,6 @@ class Image(FrameOps):
       self.img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     elif len(img.shape) == 3:
       self.img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+  
+  def __repr__(self) -> str:
+    return f'Image(shape={self.img.shape[:2]}, color={len(self.img.shape)==3})'

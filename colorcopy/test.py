@@ -16,7 +16,6 @@ def side_by_side(imgs: np.array):
         plot[i].imshow(img, cmap='gray')
     plt.show()
 
-img_0 = Image(DATASET).img
-img_1 = Image(DATASET).gamma_curve(0.455)
+image = Image(DATASET)
 
-side_by_side([img_0, img_1])
+side_by_side([image.img, image.gamma_curve(0.455)])
